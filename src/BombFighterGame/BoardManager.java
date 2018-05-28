@@ -198,6 +198,7 @@ public class BoardManager extends JFrame implements ActionListener{
     private void showDialog() throws IOException {
         String message = "";
         Bombfighter winner = checkWinner();
+        SoundCache.loadWinnerSound();
         if (winner == null) {
             message = "Game Over! No game winner, it is tie." ;
         } else {

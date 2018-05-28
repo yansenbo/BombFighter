@@ -81,16 +81,20 @@ public class Bombfighter extends Piece {
                 System.currentTimeMillis(),
                 this.bombPower,
                 bombImg);
-        //TODO: load_place_Bomb_sounds()
+        //load bomb sound
+        SoundCache.loadplaceBombSound();
+
         return bomb;
     }
 
     public void collectCoin() {
         _numberOfCoin++;
+        SoundCache.loadCollectSound();
     }
 
     public void collectLollipop() {
         this.bombPower++;
+        SoundCache.loadCollectSound(); //TODO: maybe another sound
     }
 
     public void keyPressed(KeyEvent e) throws IOException {

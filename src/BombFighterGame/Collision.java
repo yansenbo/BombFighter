@@ -9,6 +9,7 @@ public class Collision {
     private static List<Piece> pieceLists;
     private static List<Bomb> bombLists;
     private static List<Mine> mineLists;
+    private SoundCache sounds;
 
     public  static  void  load(List<Coin> _coinLists, List<Bombfighter> _bombfighterLists, List<Piece> _pieceLists, List<Bomb> _bombLists, List<Mine> _mineLists) {
         coinLists = _coinLists;
@@ -22,6 +23,7 @@ public class Collision {
         for (Bomb b: bombLists) {
             if (System.currentTimeMillis() > b.getTriggeredTime()) {
                 //TODO: loadExplodeSound()
+                SoundCache.loadExplosionSound();
                 b.setVisiable(false);
                 explode(b.getRowPos(), b.getColPos(), b.getBombPower());
             }
@@ -32,8 +34,11 @@ public class Collision {
         for (Mine m: mineLists) {
             if (m.getTriggeredTime() != -1 && System.currentTimeMillis() > m.getTriggeredTime()) {
                 //TODO: loadExplodeSound()
+
+
                 m.setVisiable(true);
                 explode(m.getRowPos(), m.getColPos(), m.getPower());
+                SoundCache.loadExplosionSound();
             }
         }
     }
@@ -132,7 +137,7 @@ public class Collision {
         for (Mine m: mineLists) {
             if (m.getRowPos() == rowPos && m.getColPos() == colPos) {
                 m.setCreateTime(System.currentTimeMillis()).
-                        setTriggeredTime(System.currentTimeMillis() + 1500); // explode after 1.5s
+                        setTriggeredTime(System.currentTimeMillis() + 1400); // explode after 1.4s
             }
         }
     }

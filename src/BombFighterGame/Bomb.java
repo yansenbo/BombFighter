@@ -13,7 +13,7 @@ public class Bomb extends Square {
     Bomb(int rowPos, int colPos, String name, long createTime, int bombPower, BufferedImage image) throws IOException {
         super(rowPos, colPos, true, name, image);
         this.createTime = createTime;
-        this.triggeredTime = createTime + 2000;
+        this.triggeredTime = createTime + 1400;
         this.bombPower = bombPower;
     }
 
