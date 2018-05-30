@@ -1,5 +1,6 @@
 package BombFighterGame;
 
+import java.io.IOException;
 import java.util.List;
 
 public class Collision {
@@ -9,14 +10,16 @@ public class Collision {
     private static List<Piece> pieceLists;
     private static List<Bomb> bombLists;
     private static List<Mine> mineLists;
+    private static List<ExplosionEffect> explosionEffectsLists;
     private SoundCache sounds;
 
-    public  static  void  load(List<Coin> _coinLists, List<Bombfighter> _bombfighterLists, List<Piece> _pieceLists, List<Bomb> _bombLists, List<Mine> _mineLists) {
+    public  static  void  load(List<Coin> _coinLists, List<Bombfighter> _bombfighterLists, List<Piece> _pieceLists, List<Bomb> _bombLists, List<Mine> _mineLists, List<ExplosionEffect> _explosionEffectsLists) {
         coinLists = _coinLists;
         bombfighterLists = _bombfighterLists;
         pieceLists = _pieceLists;
         bombLists = _bombLists;
         mineLists = _mineLists;
+        explosionEffectsLists = _explosionEffectsLists;
     }
 
     public static void checkBombExplosion(List<Bomb> bombLists) {
@@ -74,10 +77,17 @@ public class Collision {
     }
 
     private static void explode(int rowPos, int colPos, int bombPower) {
+        // bomb down side
         for (int i = rowPos; i <= 11 && i <= rowPos + bombPower; ++i) {
             if (bombPieceCollision(i, colPos)) {
                 //TODO: addAnimination()
                 break;
+            }
+            // load exlposion image at (i, colPos)
+            try {
+                explosionEffectsLists.add(new ExplosionEffect(i, colPos, true, "explosionEffects", ImageCache.getImageCache().getExplosionImg(), System.currentTimeMillis()));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 
@@ -86,6 +96,11 @@ public class Collision {
             if (bombPieceCollision(i, colPos)) {
                 //TODO: addAnimination()
                 break;
+            }
+            try {
+                explosionEffectsLists.add(new ExplosionEffect(i, colPos, true, "explosionEffects", ImageCache.getImageCache().getExplosionImg(), System.currentTimeMillis()));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 
@@ -96,6 +111,11 @@ public class Collision {
                 //TODO: addAnimination()
                 break;
             }
+            try {
+                explosionEffectsLists.add(new ExplosionEffect(rowPos, j, true, "explosionEffects", ImageCache.getImageCache().getExplosionImg(), System.currentTimeMillis()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         // bomb right side
@@ -103,6 +123,11 @@ public class Collision {
             if (bombPieceCollision(rowPos, j)) {
                 //TODO: addAnimination()
                 break;
+            }
+            try {
+                explosionEffectsLists.add(new ExplosionEffect(rowPos, j, true, "explosionEffects", ImageCache.getImageCache().getExplosionImg(), System.currentTimeMillis()));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

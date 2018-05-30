@@ -13,13 +13,15 @@ public class BoardUI extends JPanel{
     private List<Coin> coinLists;
     private List<Bombfighter> bombfighterLists;
     private List<Piece> pieceLists;
+    private List<ExplosionEffect> explosionEffectsLists;
 
-    BoardUI(List<Bomb> bombLists, List<Mine> mineLists, List<Coin> coinLists, List<Bombfighter> bombfighterLists, List<Piece> pieceLists) {
+    BoardUI(List<Bomb> bombLists, List<Mine> mineLists, List<Coin> coinLists, List<Bombfighter> bombfighterLists, List<Piece> pieceLists, List<ExplosionEffect> explosionEffectsLists) {
         this.mineLists = mineLists;
         this.bombLists = bombLists;
         this.coinLists = coinLists;
         this.bombfighterLists = bombfighterLists;
         this.pieceLists = pieceLists;
+        this.explosionEffectsLists = explosionEffectsLists;
     }
 
     @Override
@@ -66,6 +68,15 @@ public class BoardUI extends JPanel{
             x = i * 40; // i
             y = j * 40; // j
             draw(g, y, x, 40, 40, t.getImg());
+        }
+
+        for (ExplosionEffect e: explosionEffectsLists) {
+            int i = e.getRowPos();
+            int j = e.getColPos();
+            x = i * 40; // i
+            y = j * 40; // j
+            draw(g, y, x, 40, 40, e.getImg());
+
         }
 
     }

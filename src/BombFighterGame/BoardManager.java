@@ -29,13 +29,12 @@ public class BoardManager extends JFrame implements ActionListener{
     private List<Coin> coinLists;
     private List<Bombfighter> bombfighterLists;
     private List<Piece> pieceLists;
+    private List<ExplosionEffect> explosionEffectsLists;
     private Timer timer;
     private long startTime;
     public boolean gameOver ;
-    private ImageCache imgCache;
 
     BoardManager() throws IOException {
-        imgCache = new ImageCache();
         intiJframe();
         loadMenu();
         initList();
@@ -74,12 +73,12 @@ public class BoardManager extends JFrame implements ActionListener{
         startButton.setBounds(100,100, 250, 100);
         gameMenu.add(startButton);
         jf.setVisible(true);
-
+        SoundCache.loadStartSound();
     }
 
     private void initPlayer() throws IOException {
-        player1 = new Bombfighter("up", 87, 83, 65, 68, 70,3, 11, "panda", imgCache.getPanda());
-        player2 = new Bombfighter("up", 38, 40, 37, 39, 76,10, 0, "tiger", imgCache.getTiger());
+        player1 = new Bombfighter("up", 87, 83, 65, 68, 70,3, 11, "panda", ImageCache.getImageCache().getPanda());
+        player2 = new Bombfighter("up", 38, 40, 37, 39, 76,10, 0, "tiger", ImageCache.getImageCache().getTiger());
     }
 
     private void initList() {
@@ -88,12 +87,13 @@ public class BoardManager extends JFrame implements ActionListener{
         coinLists = new ArrayList<Coin>();
         bombfighterLists = new ArrayList<Bombfighter>();
         pieceLists = new ArrayList<Piece>();
+        explosionEffectsLists = new ArrayList<>();
     }
 
     private void loadGame() throws IOException {
         jf.remove(startButton);
         jf.remove(gameMenu);
-        boardUI = new BoardUI(bombLists, mineLists, coinLists, bombfighterLists, pieceLists);
+        boardUI = new BoardUI(bombLists, mineLists, coinLists, bombfighterLists, pieceLists, explosionEffectsLists);
         boardUI.setBounds(100,100,480, 480);
         startTime = System.currentTimeMillis();
         scoreBoard = new ScoreBoard(player1, player2, startTime);
@@ -110,7 +110,7 @@ public class BoardManager extends JFrame implements ActionListener{
         @Override
         public void paint(Graphics g) {
             BufferedImage outerWall = null;
-            outerWall = imgCache.getOuterWall();
+            outerWall = ImageCache.getImageCache().getOuterWall();
             for (int row = 0; row < 14; ++row) {
                 int x = row * 40 + 60;
                 int y = 60;
@@ -141,23 +141,23 @@ public class BoardManager extends JFrame implements ActionListener{
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
                 if (upLayerMap[i][j] == 0) {
-                    pieceLists.add(new Wall(i, j, true, true, false, false, "wall", imgCache.getWall()));
+                    pieceLists.add(new Wall(i, j, true, true, false, false, "wall", ImageCache.getImageCache().getWall()));
                 } else if (upLayerMap[i][j] == 3) {
-                    pieceLists.add(new River(i, j, true, false, false, false, "river", imgCache.getRiver()));
+                    pieceLists.add(new River(i, j, true, false, false, false, "river", ImageCache.getImageCache().getRiver()));
                 } else if (upLayerMap[i][j] == 4) {
                     bombfighterLists.add(player1);
                 } else if (upLayerMap[i][j] == 5) {
-                    pieceLists.add(new Castle(i, j, true, false, false, false, "castle", imgCache.getCastle()));
+                    pieceLists.add(new Castle(i, j, true, false, false, false, "castle", ImageCache.getImageCache().getCastle()));
                 } else if (upLayerMap[i][j] == 7) {
                     bombfighterLists.add(player2);
                 }
 
                 if (innerLayerMap[i][j] == 1) {
-                    coinLists.add(new Coin(i, j, true, true, true, true, "coin", imgCache.getCoin()));
+                    coinLists.add(new Coin(i, j, true, true, true, true, "coin", ImageCache.getImageCache().getCoin()));
                 } else if (innerLayerMap[i][j] == 2) {
-                    mineLists.add(new Mine(i, j, false, true, false, false, "mine", imgCache.getMine()));
+                    mineLists.add(new Mine(i, j, false, true, false, false, "mine", ImageCache.getImageCache().getMine()));
                 } else if (innerLayerMap[i][j] == 8) {
-                    coinLists.add(new Lollipop(i, j, true, true, false, false, "lollipop", imgCache.getLollipop()));
+                    coinLists.add(new Lollipop(i, j, true, true, false, false, "lollipop", ImageCache.getImageCache().getLollipop()));
                 }
             }
         }
@@ -169,6 +169,7 @@ public class BoardManager extends JFrame implements ActionListener{
         Object source = e.getSource();
         if (source == startButton) {
             jf.remove(gameMenu);
+            SoundCache.startSoundStop();
             gameOver = false;
             // listen to action, trigger action perform
             timer.start();
@@ -188,7 +189,7 @@ public class BoardManager extends JFrame implements ActionListener{
                 return;
             }
             updatePices();
-            Collision.load(coinLists, bombfighterLists, pieceLists, bombLists, mineLists);
+            Collision.load(coinLists, bombfighterLists, pieceLists, bombLists, mineLists, explosionEffectsLists);
             checkExplosion();
             checkGameOver();
             boardUI.repaint();
@@ -265,6 +266,15 @@ public class BoardManager extends JFrame implements ActionListener{
             updateMine();
             updateCoin();
             updateScoreBoard();
+            updateExplosionEffect();
+        }
+    }
+
+    private void updateExplosionEffect() {
+        int n = explosionEffectsLists.size();
+        for (int i = n-1; i >= 0; --i) {
+            if (System.currentTimeMillis() >= explosionEffectsLists.get(i).getDisappearTime())
+                explosionEffectsLists.remove(i);
         }
     }
 

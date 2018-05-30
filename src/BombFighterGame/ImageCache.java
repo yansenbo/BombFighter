@@ -6,6 +6,15 @@ import java.io.File;
 import java.io.IOException;
 
 public class ImageCache {
+    private static ImageCache imageCache;
+
+    static {
+        try {
+            imageCache = new ImageCache();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private BufferedImage panda;
     private BufferedImage tiger;
@@ -16,9 +25,10 @@ public class ImageCache {
     private BufferedImage mine;
     private BufferedImage lollipop;
     private BufferedImage outerWall;
+    private BufferedImage explosionImg;
 
 
-    public ImageCache() throws IOException {
+    private ImageCache() throws IOException {
         panda = loadImage("panda");
         tiger = loadImage("tiger");
         wall = loadImage("wall");
@@ -28,6 +38,7 @@ public class ImageCache {
         mine = loadImage("mine");
         lollipop = loadImage("lollipop");
         outerWall = loadImage("outerWall");
+        explosionImg = loadImage("explosionEffect");
     }
 
     public BufferedImage loadImage(String path) throws IOException {
@@ -69,5 +80,14 @@ public class ImageCache {
 
     public BufferedImage getOuterWall() {
         return outerWall;
+    }
+
+
+    public BufferedImage getExplosionImg() {
+        return explosionImg;
+    }
+
+    public static ImageCache getImageCache() {
+        return imageCache;
     }
 }
