@@ -217,17 +217,19 @@ public class BoardManager extends JFrame implements ActionListener{
 
     private void showDialog() throws IOException {
         String message = "";
+        ImageIcon icon;
         Bombfighter winner = checkWinner();
         SoundCache.loadWinnerSound();
         if (winner == null) {
             message = "No game winner, it is tie." ;
+            icon = new ImageIcon(Globals.IMAGEPATH + "tie.png");
         } else {
             message =  winner.getName().toUpperCase() + " Wins! Coins:" + winner.get_numberOfCoin();
+            icon = new ImageIcon(Globals.IMAGEPATH + winner.getName() +"win.png");
         }
 
         String[] choices = {"End Game", "Restart Game"};
-        ImageIcon icon = new ImageIcon(Globals.IMAGEPATH + winner.getName() +"win.png");
-        int response = JOptionPane.showOptionDialog(
+            int response = JOptionPane.showOptionDialog(
                 null
                 , message
                 , "Game Result"
