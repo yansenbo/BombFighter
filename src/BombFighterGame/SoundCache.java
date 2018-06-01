@@ -11,6 +11,7 @@ public class SoundCache {
     private static Clip winnerSound;
     private static Clip startSound;
     private static boolean initialized = false;
+    private static boolean initStartSound = false;
 
 
     public static void loadSounds(){
@@ -41,6 +42,20 @@ public class SoundCache {
             winnerSound.open(winnerSoundStream);
             winnerSound.setFramePosition(winnerSound.getFrameLength());
 
+
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        }
+
+        initialized = true;
+    }
+
+    public static void initStartSound() {
+        try {
             File startSoundFile = new File(Globals.SOUNDPATH + "startSound.wav");
             startSound = AudioSystem.getClip();
             AudioInputStream startSoundStream = AudioSystem.getAudioInputStream(startSoundFile);
@@ -53,8 +68,7 @@ public class SoundCache {
         } catch (UnsupportedAudioFileException e) {
             e.printStackTrace();
         }
-
-        initialized = true;
+        initStartSound = true;
     }
 
     public static void loadExplosionSound() {
@@ -78,7 +92,7 @@ public class SoundCache {
     }
 
     public static void loadStartSound() {
-        if (!initialized) loadSounds();
+        if (!initStartSound) initStartSound();
         startSound.loop(Clip.LOOP_CONTINUOUSLY);
     }
 

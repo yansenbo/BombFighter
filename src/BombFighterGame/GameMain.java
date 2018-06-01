@@ -11,6 +11,8 @@ public class GameMain {
             @Override
             public void run() {
                 try {
+                    Thread thread = new Thread(new LoadResources());
+                    thread.start();
                     BoardManager boardManager = new BoardManager();
                 } catch (IOException e) {
                     e.printStackTrace();

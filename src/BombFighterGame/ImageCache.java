@@ -26,6 +26,7 @@ public class ImageCache {
     private BufferedImage lollipop;
     private BufferedImage outerWall;
     private BufferedImage explosionImg;
+    private boolean initialized = false;
 
 
     private ImageCache() throws IOException {
@@ -39,6 +40,7 @@ public class ImageCache {
         lollipop = loadImage("lollipop");
         outerWall = loadImage("outerWall");
         explosionImg = loadImage("explosionEffect");
+        initialized = true;
     }
 
     public BufferedImage loadImage(String path) throws IOException {

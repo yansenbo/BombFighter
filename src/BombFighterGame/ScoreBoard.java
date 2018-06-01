@@ -30,7 +30,8 @@ public class ScoreBoard extends JPanel{
 //        timeButton.setText(105 - ((int)(System.currentTimeMillis() - startTime)/1000)+ " ");
         timeButton.setBackground(new Color(171, 215, 218));
         timeButton.setEnabled(false);
-        coinImg = ImageIO.read(new File(Globals.IMAGEPATH + "coin.png"));
+//        coinImg = ImageIO.read(new File(Globals.IMAGEPATH + "coin.png"));
+        coinImg = ImageCache.getImageCache().getCoin();
         this.add(score1);
         this.add(timeButton);
         this.add(score2);

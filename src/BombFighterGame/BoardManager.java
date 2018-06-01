@@ -35,11 +35,12 @@ public class BoardManager extends JFrame implements ActionListener{
     public boolean gameOver ;
 
     BoardManager() throws IOException {
+        System.out.println("~~~~~~ " + System.currentTimeMillis());
         intiJframe();
         loadMenu();
-        initList();
-        initPlayer();
-        initPiece(); // List of all the pieces
+//        initList();
+//        initPlayer();
+//        initPiece(); // List of all the pieces
     }
 
     private void intiJframe() {
@@ -49,6 +50,7 @@ public class BoardManager extends JFrame implements ActionListener{
         jf.setTitle("Bomb Fighter");
         jf.setSize(700, 700);
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         jf.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -64,21 +66,29 @@ public class BoardManager extends JFrame implements ActionListener{
 
     private void loadMenu() throws IOException {
         gameMenu = new GameMenu();
-        jf.add(gameMenu);
-        startButton = new JButton("Start Game");
-        startButton.setBackground(new Color(160, 159, 218));
-        startButton.setPreferredSize(new Dimension(200, 80));
+//        startButton = LoadResources.getStartButton();
+//        startButton.addActionListener(this::actionPerformed);
+        startButton = new JButton("");
+        startButton.setPreferredSize(new Dimension(130, 60));
         startButton.addActionListener(this);
-        startButton.setFont(new Font("Arial", Font.PLAIN, 20));
-        startButton.setBounds(100,100, 250, 100);
+
+        startButton.setOpaque(false);
+        startButton.setContentAreaFilled(false);
+        startButton.setBorderPainted(false);
+
+        jf.add(gameMenu);
         gameMenu.add(startButton);
         jf.setVisible(true);
         SoundCache.loadStartSound();
+
+        System.out.println("loadMe " + System.currentTimeMillis());
     }
 
     private void initPlayer() throws IOException {
         player1 = new Bombfighter("up", 87, 83, 65, 68, 70,3, 11, "panda", ImageCache.getImageCache().getPanda());
         player2 = new Bombfighter("up", 38, 40, 37, 39, 76,10, 0, "tiger", ImageCache.getImageCache().getTiger());
+
+        System.out.println("initPr " + System.currentTimeMillis());
     }
 
     private void initList() {
@@ -88,9 +98,15 @@ public class BoardManager extends JFrame implements ActionListener{
         bombfighterLists = new ArrayList<Bombfighter>();
         pieceLists = new ArrayList<Piece>();
         explosionEffectsLists = new ArrayList<>();
+
+        System.out.println("initLt " + System.currentTimeMillis());
     }
 
     private void loadGame() throws IOException {
+        initList();
+        initPlayer();
+        initPiece(); // List of all the pieces
+
         jf.remove(startButton);
         jf.remove(gameMenu);
         boardUI = new BoardUI(bombLists, mineLists, coinLists, bombfighterLists, pieceLists, explosionEffectsLists);
@@ -161,6 +177,8 @@ public class BoardManager extends JFrame implements ActionListener{
                 }
             }
         }
+
+        System.out.println("initPc " + System.currentTimeMillis());
     }
 
 
@@ -172,9 +190,10 @@ public class BoardManager extends JFrame implements ActionListener{
             SoundCache.startSoundStop();
             gameOver = false;
             // listen to action, trigger action perform
-            timer.start();
+
             try {
                 loadGame();
+                timer.start();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
@@ -201,22 +220,22 @@ public class BoardManager extends JFrame implements ActionListener{
         Bombfighter winner = checkWinner();
         SoundCache.loadWinnerSound();
         if (winner == null) {
-            message = "Game Over! No game winner, it is tie." ;
+            message = "No game winner, it is tie." ;
         } else {
-            message = "Game Over! "
-                    + winner.getName() + " Wins! Coins:" + winner.get_numberOfCoin();
+            message =  winner.getName().toUpperCase() + " Wins! Coins:" + winner.get_numberOfCoin();
         }
 
         String[] choices = {"End Game", "Restart Game"};
+        ImageIcon icon = new ImageIcon(Globals.IMAGEPATH + winner.getName() +"win.png");
         int response = JOptionPane.showOptionDialog(
                 null
                 , message
-                , "Game Menu"
+                , "Game Result"
                 , JOptionPane.YES_NO_OPTION
                 , JOptionPane.PLAIN_MESSAGE
-                , null
+                , icon
                 , choices
-                , "Game Mune"
+                , "Game Result"
         );
         if (response == 0) {
             System.exit(0);
@@ -320,9 +339,9 @@ public class BoardManager extends JFrame implements ActionListener{
     }
 
     private void restartGame() throws IOException {
-        initList();
-        initPlayer();
-        initPiece();
+//        initList();
+//        initPlayer();
+//        initPiece();
         loadGame();
         timer.start();
         gameOver = false;

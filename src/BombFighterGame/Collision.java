@@ -81,6 +81,11 @@ public class Collision {
         for (int i = rowPos; i <= 11 && i <= rowPos + bombPower; ++i) {
             if (bombPieceCollision(i, colPos)) {
                 //TODO: addAnimination()
+                try {
+                    explosionEffectsLists.add(new ExplosionEffect(i, colPos, true, "explosionEffects", ImageCache.getImageCache().getExplosionImg(), System.currentTimeMillis()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             }
             // load exlposion image at (i, colPos)
@@ -95,6 +100,11 @@ public class Collision {
         for (int i = rowPos; i >= 0 && i >= rowPos - bombPower; --i) {
             if (bombPieceCollision(i, colPos)) {
                 //TODO: addAnimination()
+                try {
+                    explosionEffectsLists.add(new ExplosionEffect(i, colPos, true, "explosionEffects", ImageCache.getImageCache().getExplosionImg(), System.currentTimeMillis()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             }
             try {
@@ -109,6 +119,11 @@ public class Collision {
         for (int j = colPos; j >= 0 && j >= colPos - bombPower; --j) {
             if (bombPieceCollision(rowPos, j)) {
                 //TODO: addAnimination()
+                try {
+                    explosionEffectsLists.add(new ExplosionEffect(rowPos, j, true, "explosionEffects", ImageCache.getImageCache().getExplosionImg(), System.currentTimeMillis()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             }
             try {
@@ -122,6 +137,11 @@ public class Collision {
         for (int j = colPos; j <= 11 && j <= colPos + bombPower; ++j) {
             if (bombPieceCollision(rowPos, j)) {
                 //TODO: addAnimination()
+                try {
+                    explosionEffectsLists.add(new ExplosionEffect(rowPos, j, true, "explosionEffects", ImageCache.getImageCache().getExplosionImg(), System.currentTimeMillis()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             }
             try {
